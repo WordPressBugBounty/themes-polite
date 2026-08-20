@@ -7,6 +7,16 @@
  * @package Polite
  */
 
+/**
+ * Theme version, read from style.css so there is only one place to bump it.
+ *
+ * Used to version every enqueued asset, which gives each release a clean
+ * cache bust instead of the hand-written numbers the theme used before.
+ */
+if ( ! defined( 'POLITE_VERSION' ) ) {
+	define( 'POLITE_VERSION', wp_get_theme( 'polite' )->get( 'Version' ) );
+}
+
 if ( ! function_exists( 'polite_setup' ) ) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -85,6 +95,34 @@ if ( ! function_exists( 'polite_setup' ) ) :
 
 		// Add support for default block styles.
 		add_theme_support( 'wp-block-styles' );
+
+		// Let group, cover and image blocks break out of the content column.
+		add_theme_support( 'align-wide' );
+
+		/*
+		 * Background colour and image control.
+		 *
+		 * The theme has always advertised the custom-background tag in style.css
+		 * but never registered the support, so the Customizer section it promises
+		 * was missing.
+		 */
+		add_theme_support(
+			'custom-background',
+			apply_filters(
+				'polite_custom_background_args',
+				array(
+					'default-color' => 'ffffff',
+					'default-image' => '',
+				)
+			)
+		);
+
+		/*
+		 * Editor styles, so the block editor renders content with the same
+		 * typography as the front end.
+		 */
+		add_theme_support( 'editor-styles' );
+		add_editor_style( 'css/editor-styles.css' );
 
 		// Add support for Yoast SEO Breadcrumbs.
         add_theme_support( 'yoast-seo-breadcrumbs' );

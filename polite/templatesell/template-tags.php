@@ -27,10 +27,13 @@ if ( ! function_exists( 'polite_posted_on' ) ) :
 		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>';
 
 	$byline = sprintf(
+            /* translators: %s: post author name, wrapped in author markup. */
             esc_html_x('By %s', 'post author', 'polite'),
             '<span class="author vcard"><a class="url fn n" href="' . esc_url(get_author_posts_url(get_the_author_meta('ID'))) . '">' . esc_html(get_the_author()) . '</a></span>'
         );
-        echo '<span class="posted-on">' . $posted_on . '</span>';
+        // $posted_on is assembled above from esc_url/esc_attr/esc_html parts;
+        // kses keeps the <time> and <a rel="bookmark"> markup intact.
+        echo '<span class="posted-on">' . wp_kses_post( $posted_on ) . '</span>';
 	}
 endif;
 
@@ -59,13 +62,19 @@ if ( ! function_exists( 'polite_entry_meta' ) ) :
 		$categories_list = get_the_category_list( esc_html__( ', ', 'polite' ) );
 
 		if ( $categories_list ) {
-			echo '<span class="cat-links">' . $categories_list . '</span>';
+			echo '<span class="cat-links">' . wp_kses_post( $categories_list ) . '</span>';
 		}
 
 		/* translators: used between list items, there is a space after the comma */
 		$tags_list = get_the_tag_list( '', esc_html__( ', ', 'polite' ) );
 		if ( $tags_list && is_singular() ) {
-			printf( '<span class="tags-links">' . '<i class="fa fa-tag"></i>' . '</span>', $tags_list ); // WPCS: XSS OK.
+			// The format string had no placeholder, so $tags_list was passed to
+			// printf() and silently discarded - the span rendered with the icon
+			// and no tags at all.
+			printf(
+				'<span class="tags-links"><i class="fa fa-tag" aria-hidden="true"></i>%s</span>',
+				wp_kses_post( $tags_list )
+			);
 		}
       	
 	}

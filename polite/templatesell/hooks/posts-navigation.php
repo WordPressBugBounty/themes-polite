@@ -14,18 +14,28 @@ if (!function_exists('polite_posts_navigation')) :
         global $polite_theme_options;
         $polite_pagination_option = $polite_theme_options['polite-pagination-options'];
         if ('numeric' == $polite_pagination_option) {
-            echo "<div class='pagination'>";
             global $wp_query;
             $big = 999999999; // need an unlikely integer
-            echo paginate_links(array(
+            // paginate_links() returns anchor markup, so kses rather than esc_html.
+            // The arrows are decorative icons, not translatable strings.
+            $polite_links = paginate_links(array(
                 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
                 'format' => '?paged=%#%',
                 'current' => max(1, get_query_var('paged')),
                 'total' => $wp_query->max_num_pages,
-                'prev_text' => __('<i class="fa fa-angle-left"></i>', 'polite'),
-                'next_text' => __('<i class="fa fa-angle-right"></i>', 'polite'),
+                'prev_text' => '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                'next_text' => '<i class="fa fa-angle-right" aria-hidden="true"></i>',
             ));
-            echo "<div>";
+
+            // paginate_links() returns null when there is one page or fewer, and
+            // passing that to wp_kses_post() is deprecated on PHP 8.1+. It also
+            // means there is no pagination worth wrapping in markup.
+            if ( ! empty( $polite_links ) ) {
+                echo "<div class='pagination'>";
+                echo wp_kses_post( $polite_links );
+                // Was an opening <div>, which left the .pagination wrapper unclosed.
+                echo "</div>";
+            }
         } elseif ('ajax' == $polite_pagination_option) {
             $page_number = get_query_var('paged');
             if ($page_number == 0) {
@@ -34,7 +44,11 @@ if (!function_exists('polite_posts_navigation')) :
                 $output_page = $page_number + 1;
             }
             if(paginate_links()) {
-            echo "<div class='ajax-pagination text-center'><div class='show-more' data-number='$output_page'><i class='fa fa-refresh'></i>" . __('View More', 'polite') . "</div><div id='free-temp-post'></div></div>";
+            printf(
+                '<div class="ajax-pagination text-center"><div class="show-more" data-number="%1$s"><i class="fa fa-refresh" aria-hidden="true"></i>%2$s</div><div id="free-temp-post"></div></div>',
+                absint( $output_page ),
+                esc_html__( 'View More', 'polite' )
+            );
             }
         } else {
             return false;

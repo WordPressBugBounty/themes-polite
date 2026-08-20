@@ -18,7 +18,7 @@ function polite_admin_scripts( $hook ) {
 	if ( 'appearance_page_polite-theme' !== $hook ) {
 		return;
 	}
-	wp_enqueue_style( 'polite-admin-style', get_template_directory_uri() . '/templatesell/about/about.css', array(), '' );
+	wp_enqueue_style( 'polite-admin-style', get_template_directory_uri() . '/templatesell/about/about.css', array(), POLITE_VERSION );
 }
 add_action( 'admin_enqueue_scripts', 'polite_admin_scripts' );
 

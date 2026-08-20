@@ -1,11 +1,11 @@
 === Polite ===
 
 Contributors: templatesell
-Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, blog, news
-Requires at least: 4.5
-Requires PHP: 4.7
-Tested up to: 6.8
-Stable tag: 1.3.5
+Tags: custom-background, custom-header, one-column, two-columns, three-columns, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, blog, news
+Requires at least: 6.0
+Requires PHP: 7.4
+Tested up to: 7.1
+Stable tag: 1.4.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,22 @@ Polite includes support for Infinite Scroll in Jetpack.
 * Custom pagination for numeric is made.
 
 == Changelog ==
+= 1.4.0 - August 20 2026 =
+* Fixed - Fatal error on pages with non-ASCII permalinks. Percent-encoded characters in a URL were read as sprintf() format specifiers, which threw an uncaught ArgumentCountError on PHP 8 and returned a 500 for the whole page.
+* Fixed - Post tags never rendered on single posts; the printf() call had no placeholder so the tag list was discarded.
+* Fixed - Slider never received its configuration; the data-slick attribute was always empty.
+* Fixed - Numeric pagination emitted an opening div instead of a closing one, leaving the wrapper unclosed.
+* Fixed - Blockquotes referenced Playfair Display, which was never loaded, so they fell back to a generic serif.
+* Fixed - Widget script registered `true` in the version argument, so it was never set to load in the footer.
+* Security - Added nonce and capability checks to the Upgrade To Pro notice dismissal, which previously wrote user meta from a bare GET parameter.
+* Security - Escaped all remaining theme output.
+* Changed - Google Fonts are now bundled with the theme instead of being requested from fonts.googleapis.com, so no visitor data is sent to a third party.
+* Added - Recommended plugins notice for the free Template Sell plugins. Nothing is bundled or installed automatically.
+* Added - align-wide and custom-background support. custom-background had been advertised in the theme tags without ever being registered.
+* Added - Real block editor styles; css/editor-styles.css had been an empty file.
+* Added - languages/polite.pot so the theme can be translated.
+* Changed - Requires PHP raised to 7.4 and Requires at least set to 6.0.
+* Tested with WP 7.1
 = 1.3.5 - May 01 2025 =
 * Tested with WP 6.8
 * Changed copyright date
@@ -211,6 +227,10 @@ Polite is distributed under the terms of the GNU GPL v2 or later.
 * Font-Awesome https://github.com/FortAwesome/Font-Awesome FontAwesome 4.6.3 Copyright 2012 Dave Gandy Font License: SIL OFL 1.1 Code License: MIT License http://fontawesome.io/license/
 * imagesLoaded MIT License https://imagesloaded.desandro.com/#mit-license
 * Canvi The MIT License (MIT) https://github.com/thepinecode/canvi/blob/master/LICENSE.txt
+* Muli, by Vernon Adams and Jacques Le Bailly, [SIL Open Font License 1.1](https://scripts.sil.org/OFL) - bundled in assets/fonts/
+* Prata, by Cyreal, [SIL Open Font License 1.1](https://scripts.sil.org/OFL) - bundled in assets/fonts/
+* Playfair Display, by Claus Eggers Sorensen, [SIL Open Font License 1.1](https://scripts.sil.org/OFL) - bundled in assets/fonts/
+* Monsieur La Doulaise, by Sudtipos, [SIL Open Font License 1.1](https://scripts.sil.org/OFL) - bundled in assets/fonts/
 * Pro Notice - ThemeGrill Demo Importer GPL license
 
 == Screenshot Images [CCO License] ==

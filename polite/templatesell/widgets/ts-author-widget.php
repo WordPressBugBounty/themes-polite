@@ -82,14 +82,14 @@ if (!class_exists('Polite_Author_Widget')) :
             $author_sign = !empty($instance['author_sign']) ? $instance['author_sign'] : '';
 
 
-            echo $args['before_widget']; ?>
+            echo wp_kses_post( $args['before_widget'] ); ?>
 
             <div class="author-profile">
 
                 <?php
 
                 if ($title) {
-                    echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+                    echo wp_kses_post( $args['before_title'] ) . esc_html( $title ) . wp_kses_post( $args['after_title'] );
                 } ?>
 
                 <div class="author-wrapper social-menu-wrap">
@@ -180,7 +180,7 @@ if (!class_exists('Polite_Author_Widget')) :
 
             <?php
 
-            echo $args['after_widget'];
+            echo wp_kses_post( $args['after_widget'] );
 
         }
 
@@ -254,8 +254,8 @@ if (!class_exists('Polite_Author_Widget')) :
             </p>
 
             <p>
-                <label for="<?php echo $this->get_field_id('author_image'); ?>">
-                    <?php _e('Select Image: Recommended size 250*250', 'polite'); ?>
+                <label for="<?php echo esc_attr( $this->get_field_id('author_image') ); ?>">
+                    <?php esc_html_e( 'Select Image: Recommended size 250*250', 'polite' ); ?>
                 </label>
                 <br/>
                 <?php
@@ -265,14 +265,14 @@ if (!class_exists('Polite_Author_Widget')) :
                 ?>
 
                 <input type="text" class="widefat custom_media_url"
-                       name="<?php echo $this->get_field_name('author_image'); ?>"
-                       id="<?php echo $this->get_field_id('author_image'); ?>" value="<?php
+                       name="<?php echo esc_attr( $this->get_field_name('author_image') ); ?>"
+                       id="<?php echo esc_attr( $this->get_field_id('author_image') ); ?>" value="<?php
                 if (isset($instance['author_image']) && $instance['author_image'] != '') :
                     echo esc_url($instance['author_image']);
                 endif;
                 ?>">
                 <input type="button" class="button button-primary custom_media_button" id="custom_media_button"
-                       name="<?php echo $this->get_field_name('author_image'); ?>"
+                       name="<?php echo esc_attr( $this->get_field_name('author_image') ); ?>"
                        value="<?php esc_attr_e('Upload Image', 'polite') ?>"/>
             </p>
 
@@ -356,7 +356,9 @@ endif;
 add_action('admin_enqueue_scripts', 'polite_widgets_backend_enqueue');
 function polite_widgets_backend_enqueue()
 {
-    wp_register_script('polite-custom-widgets', get_template_directory_uri() . '/assets/js/widgets.js', array('jquery'), true);
+    // The 4th argument is $ver, not $in_footer - `true` was landing in the
+    // version slot and the footer flag was never set at all.
+    wp_register_script('polite-custom-widgets', get_template_directory_uri() . '/assets/js/widgets.js', array('jquery'), POLITE_VERSION, true);
     
     wp_enqueue_media();
     wp_enqueue_script('polite-custom-widgets');

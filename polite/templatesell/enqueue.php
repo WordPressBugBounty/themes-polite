@@ -4,28 +4,31 @@
  */
 function polite_scripts() {
 
-	/*google font  */
 	global $polite_theme_options;
-    /*body  */
-    wp_enqueue_style('polite-body', '//fonts.googleapis.com/css?family=Muli:400,400i,500,600,700&display=swap', array(), null);
-    /*heading  */
-    wp_enqueue_style('polite-heading', '//fonts.googleapis.com/css?family=Prata&display=swap', array(), null);
-    /*Author signature google font  */
-    wp_enqueue_style('polite-sign', '//fonts.googleapis.com/css?family=Monsieur+La+Doulaise&display=swap', array(), null);
-    
+
+	/*
+	 * Webfonts, served from the theme.
+	 *
+	 * These used to come from fonts.googleapis.com, which sends every visitor's
+	 * IP to a third party before they have consented to anything. The files now
+	 * live in assets/fonts/ and are declared in fonts.css, which keeps their
+	 * unicode-range so browsers still fetch only the subsets a page needs.
+	 */
+	wp_enqueue_style( 'polite-fonts', get_template_directory_uri() . '/assets/fonts/fonts.css', array(), POLITE_VERSION );
+
 	//*Font-Awesome-master*/
     wp_enqueue_style( 'font-awesome', get_template_directory_uri() . '/css/font-awesome.min.css', array(), '4.5.0' );
 
-    wp_enqueue_style( 'grid-css', get_template_directory_uri() . '/css/grid.min.css', array(), '4.5.0' );
-    
+    wp_enqueue_style( 'grid-css', get_template_directory_uri() . '/css/grid.min.css', array(), POLITE_VERSION );
+
     /*Slick CSS*/
-    wp_enqueue_style( 'slick', get_template_directory_uri() . '/assets/css/slick.css', array(), '4.5.0' );
-	
+    wp_enqueue_style( 'slick', get_template_directory_uri() . '/assets/css/slick.css', array(), '1.8.1' );
+
     /*mmenu CSS*/
-    wp_enqueue_style( 'offcanvas-style', get_template_directory_uri() . '/assets/css/canvi.css', array(), '4.5.0' );
+    wp_enqueue_style( 'offcanvas-style', get_template_directory_uri() . '/assets/css/canvi.css', array(), POLITE_VERSION );
 
    /*Main CSS*/
-    wp_enqueue_style( 'polite-style', get_stylesheet_uri() );
+    wp_enqueue_style( 'polite-style', get_stylesheet_uri(), array(), POLITE_VERSION );
 
 	/*RTL CSS*/
 	wp_style_add_data( 'polite-style', 'rtl', 'replace' );
@@ -93,11 +96,10 @@ add_action( 'wp_enqueue_scripts', 'polite_scripts' );
  * Enqueue fonts for the editor style
  */
 function polite_block_styles() {
-    wp_enqueue_style( 'polite-editor-styles', get_theme_file_uri( 'css/editor-styles.css' ) );
+    wp_enqueue_style( 'polite-editor-styles', get_theme_file_uri( 'css/editor-styles.css' ), array(), POLITE_VERSION );
 
-    wp_enqueue_style('polite-editor-body', '//fonts.googleapis.com/css?family=Muli:400,400i,500,600,700&display=swap', array(), null);
-    /*heading  */
-    wp_enqueue_style('polite-editor-heading', '//fonts.googleapis.com/css?family=Prata&display=swap', array(), null);
+    // Same locally hosted webfonts the front end uses, so the editor matches it.
+    wp_enqueue_style( 'polite-fonts', get_template_directory_uri() . '/assets/fonts/fonts.css', array(), POLITE_VERSION );
 
     $polite_custom_css = '
     .edit-post-visual-editor.editor-styles-wrapper{ font-family: Muli;}

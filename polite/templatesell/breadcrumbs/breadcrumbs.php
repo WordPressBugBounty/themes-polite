@@ -251,7 +251,7 @@ class Polite_Breadcrumb_Trail {
 
                 $item = ! empty( $matches )
                     ? preg_replace( '/(<a.*?)([\'"])>/i', '$1$2 itemprop=$2item$2>', $item )
-                    : sprintf( '<a href="'.esc_url( $link_item ).'" itemprop="item">%s</a>', $item );
+                    : sprintf( '<a href="%1$s" itemprop="item">%2$s</a>', esc_url( $link_item ), $item );
 
                 // Add list item classes.
                 $item_class = 'trail-item';
@@ -292,7 +292,13 @@ class Polite_Breadcrumb_Trail {
         if ( false === $this->args['echo'] )
             return $breadcrumb;
 
-        echo $breadcrumb;
+        /*
+         * Every part of $breadcrumb is escaped where it is built above
+         * (esc_url, esc_attr, tag_escape, absint). It is not run through
+         * wp_kses_post() here because that would strip the <meta itemprop>
+         * elements the schema.org BreadcrumbList markup depends on.
+         */
+        echo $breadcrumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     /* ====== Protected Methods ====== */

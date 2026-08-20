@@ -55,7 +55,6 @@ if (!function_exists('polite_exclude_category_in_blog_page')) :
                 $cats = explode(',', $exclude_categories);
                 $cats = array_filter($cats, 'is_numeric');
                 $string_exclude = '';
-                echo $string_exclude;
                 if (!empty($cats)) {
                     $string_exclude = '-' . implode(',-', $cats);
                     $query->set('cat', $string_exclude);

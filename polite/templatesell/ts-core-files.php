@@ -94,3 +94,8 @@ if ( is_admin() ) {
  require get_template_directory() . '/templatesell/about/about.php';
  require get_template_directory() . '/templatesell/pro-notice/pro-notice.php';
 }
+
+/**
+ * Recommended plugins notice.
+ */
+require get_template_directory() . '/templatesell/plugin-notice/plugin-notice.php';

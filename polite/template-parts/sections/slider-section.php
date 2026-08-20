@@ -15,6 +15,9 @@ $slick_args = array(
     'dots'              => false,
     'arrows'            => false,
 );
+// $slick_args was assembled but never encoded, so the slider markup always
+// carried an empty data-slick attribute and Slick fell back to its defaults.
+$slick_args_encoded = wp_json_encode( $slick_args );
 $args = array(
  'posts_per_page' => 3,
  'paged' => 1,
@@ -24,7 +27,7 @@ $args = array(
 $slider_query = new WP_Query($args);
 if ($slider_query->have_posts()): ?>
     <div class="container">
-        <div class="modern-slider" data-slick='<?php echo isset( $slick_args_encoded ) ? $slick_args_encoded : ''; ?>'>
+        <div class="modern-slider" data-slick='<?php echo esc_attr( $slick_args_encoded ); ?>'>
             <?php while ($slider_query->have_posts()) : $slider_query->the_post();
               if(has_post_thumbnail()){
                   $image_id = get_post_thumbnail_id();
@@ -49,7 +52,7 @@ if ($slider_query->have_posts()): ?>
                     </div>
                     <div class="post-excerpt entry-content">
                       <?php the_excerpt(); ?>
-                      <a class="more-btn" href="<?php the_permalink(); ?>"><?php _e('Read More', 'polite'); ?></a>
+                      <a class="more-btn" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Read More', 'polite' ); ?></a>
                   </div>
               </div>
           </div>

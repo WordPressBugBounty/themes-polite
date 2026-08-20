@@ -41,17 +41,17 @@ if (!class_exists('Polite_Social_Widget')) :
 
             $title = apply_filters('widget_title', empty($instance['title']) ? '' : $instance['title'], $instance, $this->id_base);
 
-            echo $args['before_widget'];
+            echo wp_kses_post( $args['before_widget'] );
 
             if (!empty($title)) {
-                echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+                echo wp_kses_post( $args['before_title'] ) . esc_html( $title ) . wp_kses_post( $args['after_title'] );
             }
 
             if (has_nav_menu('social')) {
                 wp_nav_menu(array('theme_location' => 'social', 'menu_class' => 'social-menu'));
             }
 
-            echo $args['after_widget'];
+            echo wp_kses_post( $args['after_widget'] );
 
         }
 

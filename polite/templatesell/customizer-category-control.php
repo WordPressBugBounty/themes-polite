@@ -29,10 +29,25 @@ if ( ! class_exists( 'WP_Customize_Control' ) )
       $polite_dropdown = str_replace( '<select', '<select ' . $this->get_link(), $polite_dropdown );
 
       printf(
-        '<label class="customize-control-select"><span class="customize-control-title">%s</span><span class="description customize-control-description">%s</span> %s </label>',
-        $this->label,
-        $this->description,
-        $polite_dropdown
+        '<label class="customize-control-select"><span class="customize-control-title">%1$s</span><span class="description customize-control-description">%2$s</span> %3$s </label>',
+        esc_html( $this->label ),
+        esc_html( $this->description ),
+        wp_kses(
+          $polite_dropdown,
+          array(
+            'select' => array(
+              'name'                        => array(),
+              'id'                          => array(),
+              'class'                       => array(),
+              'multiple'                    => array(),
+              'data-customize-setting-link' => array(),
+            ),
+            'option' => array(
+              'value'    => array(),
+              'selected' => array(),
+            ),
+          )
+        )
       );
     }
   }
